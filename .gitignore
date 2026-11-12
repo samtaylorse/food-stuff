@@ -15,6 +15,7 @@ browser-state/
 storage-state*.json
 
 # Private household data, input photos, shopping handoffs and snapshots
+local/
 data/
 local-data/
 private/

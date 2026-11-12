@@ -1,6 +1,6 @@
 # Meal Planner — Project Brief
 
-Date: November 11, 2026 · Status: agreed direction; setup only; integrations unproven.
+Date: November 11, 2026 · Status: agreed direction; local subscription path validated for the tested account/model ([findings](SUBSCRIPTION_PROTOTYPE_FINDINGS.md)); shopping integrations unproven.
 
 ## Purpose and users
 
@@ -67,9 +67,9 @@ The approved list is the shared handoff artifact, with stable identifiers, revis
 
 ## AI access and technical direction
 
-Start **only with Sign in with ChatGPT using the user's existing Plus allowance**. First verify that this particular locally hosted app can use the documented subscription route. Signing in is separate from granting plan usage, and eligible Plus usage consumes existing shared plan limits. Do not assume sign-in alone provides inference. [ChatGPT Learn](https://learn.chatgpt.com/docs/sign-in-with-chatgpt)
+Start **only with Sign in with ChatGPT using the user's existing Plus allowance**. Signing in is separate from granting plan usage, and eligible Plus usage consumes existing shared plan limits. Do not assume sign-in alone provides inference. [ChatGPT Learn](https://learn.chatgpt.com/docs/sign-in-with-chatgpt)
 
-Official guidance documents optional plan usage for open-source and locally hosted apps; paid or remotely hosted offerings have a separate interest process. This supports investigating the proposed local approach, not claiming this app already qualifies or works. [Developer overview](https://developers.openai.com/siwc/token-sharing-open-source)
+Official guidance documents optional plan usage for open-source and locally hosted apps; paid or remotely hosted offerings have a separate interest process. The prototype result is limited to the tested account/model and does not establish hosted-app eligibility. [Developer overview](https://developers.openai.com/siwc/token-sharing-open-source)
 
 The preview supports text and image input when the selected model accepts them, but excludes audio/transcription and native hosted computer use. The separately launched desktop shopping skill is a different execution environment; do not present it as a hosted capability of the planner's inference route. [Preview limitations](https://developers.openai.com/siwc/token-sharing-open-source/preview-limitations)
 
@@ -102,13 +102,12 @@ Sources were checked November 11, 2026. Recheck changing preview and integration
 
 ## Staged next actions — not authorized implementation yet
 
-1. **Prove subscription access:** verify local-app eligibility, then test sign-in/plan consent, text, photo, and a change request. Document limits and failure handling. Stop for a user decision if this route cannot work.
-2. **Prove shopping:** test the five-ingredient desktop cart at one store, including pack arithmetic, then compare two address-available stores and verify rerun/revision reconciliation. Leave checkout to the user.
-3. **Build the thin integrated planner:** implement simple centralized internal planning configuration with the agreed defaults, derived dinner coverage, snapshot corrections, consistent revision updates, saved recipes, local persistence, and saved approved-list handoff. Do not add a settings UI yet. Test built-in iPhone keyboard and laptop OS dictation in the text fields, including correction before submit; validate laptop use and optional phone access separately.
-4. **Try one real week:** review portions, cooking effort, useful prompts, stock deductions, waste, actual basket cost, and manual corrections. Refine from observed friction.
+1. **Prove shopping:** test the five-ingredient desktop cart at one store, including pack arithmetic, then compare two address-available stores and verify rerun/revision reconciliation. Leave checkout to the user.
+2. **Build the thin integrated planner:** implement simple centralized internal planning configuration with the agreed defaults, derived dinner coverage, snapshot corrections, consistent revision updates, saved recipes, local persistence, and saved approved-list handoff. Do not add a settings UI yet. Test built-in iPhone keyboard and laptop OS dictation in the text fields, including correction before submit; validate laptop use and optional phone access separately.
+3. **Try one real week:** review portions, cooking effort, useful prompts, stock deductions, waste, actual basket cost, and manual corrections. Refine from observed friction.
 
 ## Deferred and excluded
 
 Lunch planning, fixed day calendars, nutrition optimization, continuous pantry maintenance, automatic remote triggering, multi-store checkout optimization, public hosting, multi-household accounts, extra AI providers, and direct delivery API integration are not required for V1. Custom audio recording, transcription, and realtime voice services are excluded from V1; built-in OS dictation supplies spoken input as editable text without a separate AI billing path.
 
-Current authorization covers this brief and Git setup only. No app, desktop skill, account application, signed-in account browsing, purchase, remote, push, or commit has been authorized as part of setup.
+The local subscription prototype is a technical access proof, not an implementation of the planner or cart workflow. This does not authorize the full meal planner, cart skill, account applications, signed-in account browsing, purchase, remote, or push.
