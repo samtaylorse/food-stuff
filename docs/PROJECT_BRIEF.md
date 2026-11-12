@@ -14,20 +14,26 @@ The initial household normally cooks twice, sometimes three times per week. Food
 - Under those defaults, each recipe covers three dinners for the household: twelve individual portions cover six household dinners, leaving one evening flexible.
 - Derive coverage from the active configuration and actual recipe yields, rather than hardcoding six dinners or one flexible evening. For each recipe, divide individual portions by household size to report complete household dinners and any leftover individual portions; do not silently round partial coverage into a full dinner. Report weekly coverage and any uncovered evenings or surplus explicitly.
 - Recipes remain flexible; do not assign them to particular days. Permit changes to recipe count, servings, or approach when requested.
-- Each recipe includes a concise ingredient list with quantities and units, explicit servings, clear cooking steps, and estimated prep and cook times. Published recipes or external recipe links are unnecessary.
+- Each recipe includes a concise ingredient list with quantities and units, explicit servings, clear cooking steps, estimated prep and cook times, and a visible reference to its original source.
 
 Centralize these values in a simple internal configuration structure. Planning, portion scaling, coverage calculation, and shopping-list quantities must use the same values. No settings UI or settings framework is needed in the proof of concept. A future web settings UI should be able to expose the same values without rewriting that logic. This setup task adds documentation only, not runtime configuration code.
 
+## Recipe sources
+
+Every recipe displayed by the app must have an associated, identifiable source, including initial suggestions, replacements, and saved recipes. Show the original recipe link or an identifiable user-supplied source reference alongside the recipe. Save its title, source URL or reference, and author or publisher where available so attribution survives reuse and serving changes. A generated citation is not a source: the recipe must actually come from the referenced material.
+
+V1 will not use AI-generated recipes. AI may find and select existing sourced recipes, faithfully extract or summarize their ingredients and instructions, and interpret planning feedback. Serving quantities may be scaled from the source yield. Do not invent ingredients, cooking steps, or recipe variations. Requests such as “less dairy” or “make this vegetarian” should select an existing sourced recipe that meets the request rather than generate an adaptation. If no suitable sourced recipe is available, explain the gap instead of displaying an invented replacement.
+
 ## V1 experience
 
-1. Start a week using the active configuration, explicitly saved household preferences, and any temporary requests. Show the configured number of complete proposed recipes (initially two) and the derived dinner coverage.
+1. Start a week using the active configuration, explicitly saved household preferences, and any temporary requests. Show the configured number of complete proposed recipes (initially two), each selected from an identifiable source, and the derived dinner coverage.
 2. Accept freezer, fridge, and pantry photos plus text corrections. For spoken input, use built-in iPhone keyboard voice-to-text or laptop OS dictation in ordinary text fields. Let the user review and correct the resulting text before submitting; no auto-send microphone flow is needed.
 3. Use the current stock snapshot to identify relevant ingredients and uncertain quantities. Ask only confirmations that affect the plan or shopping requirements.
-4. Revise naturally: “less red meat,” “less dairy,” “quicker,” “use the freezer chicken,” or swap one recipe. Preserve unaffected meals and update the changed recipes and grocery list consistently.
+4. Revise naturally: “less red meat,” “less dairy,” “quicker,” “use the freezer chicken,” or swap one recipe. Select suitable sourced alternatives, preserve unaffected meals, and update source references, serving quantities, and the grocery list consistently.
 5. Show a consolidated shopping list with recipe requirements, confirmed on-hand deductions, and missing quantities. Let the user review and approve a saved list revision.
 6. Manually launch a separate reusable ChatGPT/Codex desktop browser/computer-use skill. It reads the approved saved list directly, discovers stores for the selected delivery address, compares a bounded set, and builds the chosen cart.
 7. Present product quantities, costs, surplus, unavailable items, and substitutions for review. The user handles final review and checkout entirely.
-8. Save successful recipes for consistent reuse, including quantities, servings, and later deliberate edits.
+8. Save successful recipes for consistent reuse, including their original source, quantities, servings, and source-preserving corrections or serving changes.
 
 Phone and laptop friendly web UI is the target. Laptop-first local hosting is accepted; phone access to the laptop host remains unvalidated. The user may choose to do the whole kitchen workflow on a laptop. V1 does not need phone-triggered remote automation.
 
@@ -61,7 +67,7 @@ Flag unavailable ingredients and proposed substitutions, including effects on qu
 
 Keep temporary weekly requests separate from explicitly saved household preferences. A request for less dairy this week must not become a permanent restriction. Save household changes only when the user explicitly asks. Successful recipes should retain stable identities and predictable quantities when reused.
 
-Proposed minimal records: planning configuration, household preferences, week and recipe revisions, stock observations with confirmation state, consolidated list revisions with approval state, saved recipes, and cart reconciliation results. Record the configuration used by a week so later changes do not silently alter an approved revision. Preserve a saved recipe's base yield and scale it deliberately to the requested individual portions. Store ingredient totals and units consistently; calculate portion scaling, dinner coverage, aggregation, deductions, and pack arithmetic deterministically. AI proposes and interprets; validated saved data drives the list and cart handoff.
+Proposed minimal records: planning configuration, household preferences, week and recipe revisions with source metadata, stock observations with confirmation state, consolidated list revisions with approval state, saved sourced recipes, and cart reconciliation results. Record the configuration used by a week so later changes do not silently alter an approved revision. Preserve a saved recipe's source and base yield and scale it deliberately to the requested individual portions. Store ingredient totals and units consistently; calculate portion scaling, dinner coverage, aggregation, deductions, and pack arithmetic deterministically. AI selects sourced recipes and interprets feedback; validated saved data drives the list and cart handoff.
 
 The approved list is the shared handoff artifact, with stable identifiers, revision, quantities/units, constraints, and approval time. The desktop skill consumes it without retyping. Keep the human-readable view and machine-readable handoff derived from the same saved revision. Reloading the planner must preserve the week, recipes, and approved list.
 
@@ -87,9 +93,10 @@ Sources were checked November 11, 2026. Recheck changing preview and integration
 
 ## Practical acceptance criteria
 
+- Every displayed recipe has a visible, identifiable original source. Saved recipes and serving-scaled versions retain their source metadata; ingredients and instructions are traceable to that source. No AI-generated recipes or invented variations appear in V1.
 - With the initial configuration (2 people, 2 recipes per week, 6 individual portions per recipe), the proposed week explains six household dinners plus one flexible evening, without assigning days.
 - Changing household size, weekly recipe count, or portions per recipe through internal configuration updates recipe proposals, scaled quantities, derived coverage, and grocery totals consistently. Verify a non-default combination and a yield that leaves partial household coverage; report leftover portions accurately. No settings UI is required, and future UI controls can use the same configuration and logic.
-- A request to change one meal preserves the other and updates ingredient totals and the shopping list together.
+- A request to change one meal selects a suitable sourced replacement, preserves the other, and updates source references, ingredient totals, and the shopping list together. If no suitable source is available, the app reports that limitation without inventing a recipe.
 - A stock-photo example distinguishes uncertain recognition/amounts from confirmed amounts, asks only relevant questions, and neither infers absence from invisibility nor sufficiency from presence.
 - Shared ingredients aggregate correctly; confirmed stock is deducted once; every missing staple remains on the list.
 - Weekly preferences remain temporary; explicit household preferences and saved successful recipes survive reload and reuse.
@@ -103,11 +110,11 @@ Sources were checked November 11, 2026. Recheck changing preview and integration
 ## Staged next actions — not authorized implementation yet
 
 1. **Prove shopping:** test the five-ingredient desktop cart at one store, including pack arithmetic, then compare two address-available stores and verify rerun/revision reconciliation. Leave checkout to the user.
-2. **Build the thin integrated planner:** implement simple centralized internal planning configuration with the agreed defaults, derived dinner coverage, snapshot corrections, consistent revision updates, saved recipes, local persistence, and saved approved-list handoff. Do not add a settings UI yet. Test built-in iPhone keyboard and laptop OS dictation in the text fields, including correction before submit; validate laptop use and optional phone access separately.
+2. **Build the thin integrated planner:** implement source-backed recipe selection and visible attribution, simple centralized internal planning configuration with the agreed defaults, derived dinner coverage, snapshot corrections, consistent revision updates, saved sourced recipes, local persistence, and saved approved-list handoff. Do not add a settings UI yet. Test built-in iPhone keyboard and laptop OS dictation in the text fields, including correction before submit; validate laptop use and optional phone access separately.
 3. **Try one real week:** review portions, cooking effort, useful prompts, stock deductions, waste, actual basket cost, and manual corrections. Refine from observed friction.
 
 ## Deferred and excluded
 
-Lunch planning, fixed day calendars, nutrition optimization, continuous pantry maintenance, automatic remote triggering, multi-store checkout optimization, public hosting, multi-household accounts, extra AI providers, and direct delivery API integration are not required for V1. Custom audio recording, transcription, and realtime voice services are excluded from V1; built-in OS dictation supplies spoken input as editable text without a separate AI billing path.
+AI-generated recipes and invented recipe variations are excluded from V1. Lunch planning, fixed day calendars, nutrition optimization, continuous pantry maintenance, automatic remote triggering, multi-store checkout optimization, public hosting, multi-household accounts, extra AI providers, and direct delivery API integration are not required for V1. Custom audio recording, transcription, and realtime voice services are excluded from V1; built-in OS dictation supplies spoken input as editable text without a separate AI billing path.
 
 The local subscription prototype is a technical access proof, not an implementation of the planner or cart workflow. This does not authorize the complete Food Stuff application, cart skill, account applications, signed-in account browsing, purchase, remote, or push.
