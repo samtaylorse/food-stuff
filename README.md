@@ -1,4 +1,4 @@
-# Meal Planner
+# Food Stuff
 
 A personal meal-planning tool, starting with dinners, for choosing practical meals and turning them into recipes, shopping lists, and reviewable delivery carts.
 

@@ -1,10 +1,10 @@
-# Meal Planner — Project Brief
+# Food Stuff — Project Brief
 
 Date: November 11, 2026 · Status: agreed direction; local subscription path validated for the tested account/model ([findings](SUBSCRIPTION_PROTOTYPE_FINDINGS.md)); shopping integrations unproven.
 
 ## Purpose and users
 
-Build a general personal meal planner, starting with dinners. Its initial household is two people in Nanaimo, BC, but household size and planning quantities are configurable, not fixed product constraints. Help users choose dinners, cook practical batch recipes, and turn the result into an accurate grocery list and a reviewable delivery cart. Reduce the weekly work of deciding, calculating quantities, checking stock, comparing stores, and entering products. Lunches already have a separate plan for the initial household and are outside V1.
+Build a general personal meal-planning application, starting with dinners. Its initial household is two people in Nanaimo, BC, but household size and planning quantities are configurable, not fixed product constraints. Help users choose dinners, cook practical batch recipes, and turn the result into an accurate grocery list and a reviewable delivery cart. Reduce the weekly work of deciding, calculating quantities, checking stock, comparing stores, and entering products. Lunches already have a separate plan for the initial household and are outside V1.
 
 The initial household normally cooks twice, sometimes three times per week. Food choices stay open unless the user specifies a preference. The tool should start with a complete usable proposal rather than requiring a planning interview.
 
@@ -110,4 +110,4 @@ Sources were checked November 11, 2026. Recheck changing preview and integration
 
 Lunch planning, fixed day calendars, nutrition optimization, continuous pantry maintenance, automatic remote triggering, multi-store checkout optimization, public hosting, multi-household accounts, extra AI providers, and direct delivery API integration are not required for V1. Custom audio recording, transcription, and realtime voice services are excluded from V1; built-in OS dictation supplies spoken input as editable text without a separate AI billing path.
 
-The local subscription prototype is a technical access proof, not an implementation of the planner or cart workflow. This does not authorize the full meal planner, cart skill, account applications, signed-in account browsing, purchase, remote, or push.
+The local subscription prototype is a technical access proof, not an implementation of the planner or cart workflow. This does not authorize the complete Food Stuff application, cart skill, account applications, signed-in account browsing, purchase, remote, or push.
