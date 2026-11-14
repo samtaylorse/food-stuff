@@ -4,7 +4,7 @@ Date: November 11, 2026 · Status: agreed direction; local subscription path val
 
 ## Purpose and users
 
-Build a general personal meal-planning application, starting with dinners. Its initial household is two people in Nanaimo, BC, but household size and planning quantities are configurable, not fixed product constraints. Help users choose dinners, cook practical batch recipes, and turn the result into an accurate grocery list and a reviewable delivery cart. Reduce the weekly work of deciding, calculating quantities, checking stock, comparing stores, and entering products. Lunches already have a separate plan for the initial household and are outside V1.
+Build a general personal meal-planning application, starting with dinners. Its initial household configuration is two people, but household size and planning quantities are configurable, not fixed product constraints. Help users choose dinners, cook practical batch recipes, and turn the result into an accurate grocery list and a reviewable delivery cart. Reduce the weekly work of deciding, calculating quantities, checking stock, comparing stores, and entering products. Lunches already have a separate plan for the initial household and are outside V1.
 
 The initial household normally cooks twice, sometimes three times per week. Food choices stay open unless the user specifies a preference. The tool should start with a complete usable proposal rather than requiring a planning interview.
 
@@ -20,20 +20,22 @@ Centralize these values in a simple internal configuration structure. Planning, 
 
 ## Recipe sources
 
+Start live discovery with Good Food and RecipeTin Eats rather than a fixed recipe catalog. Automatically try another suitable sourced recipe when a candidate is blocked or incomplete, and interrupt only when no usable match can be found. Save selected cooking information locally for consistent reuse: ingredients, faithful concise steps, original yield, and attribution; exclude article text, comments, and photos. Reuse and scaling operate on that saved base version. These product choices still require an extraction trial and source access/use checks; they do not establish a completed importer. See [Source selection and recipe display policy](../.scratch/v1-spec/issues/08-source-selection.md).
+
 Every recipe displayed by the app must have an associated, identifiable source, including initial suggestions, replacements, and saved recipes. Show the original recipe link or an identifiable user-supplied source reference alongside the recipe. Save its title, source URL or reference, and author or publisher where available so attribution survives reuse and serving changes. A generated citation is not a source: the recipe must actually come from the referenced material.
 
 V1 will not use AI-generated recipes. AI may find and select existing sourced recipes, faithfully extract or summarize their ingredients and instructions, and interpret planning feedback. Serving quantities may be scaled from the source yield. Do not invent ingredients, cooking steps, or recipe variations. Requests such as “less dairy” or “make this vegetarian” should select an existing sourced recipe that meets the request rather than generate an adaptation. If no suitable sourced recipe is available, explain the gap instead of displaying an invented replacement.
 
 ## V1 experience
 
-1. Start a week using the active configuration, explicitly saved household preferences, and any temporary requests. Show the configured number of complete proposed recipes (initially two), each selected from an identifiable source, and the derived dinner coverage.
-2. Accept freezer, fridge, and pantry photos plus text corrections. For spoken input, use built-in iPhone keyboard voice-to-text or laptop OS dictation in ordinary text fields. Let the user review and correct the resulting text before submitting; no auto-send microphone flow is needed.
-3. Use the current stock snapshot to identify relevant ingredients and uncertain quantities. Ask only confirmations that affect the plan or shopping requirements.
-4. Revise naturally: “less red meat,” “less dairy,” “quicker,” “use the freezer chicken,” or swap one recipe. Select suitable sourced alternatives, preserve unaffected meals, and update source references, serving quantities, and the grocery list consistently.
-5. Show a consolidated shopping list with recipe requirements, confirmed on-hand deductions, and missing quantities. Let the user review and approve a saved list revision.
-6. Manually launch a separate reusable ChatGPT/Codex desktop browser/computer-use skill. It reads the approved saved list directly, discovers stores for the selected delivery address, compares a bounded set, and builds the chosen cart.
-7. Present product quantities, costs, surplus, unavailable items, and substitutions for review. The user handles final review and checkout entirely.
-8. Save successful recipes for consistent reuse, including their original source, quantities, servings, and source-preserving corrections or serving changes.
+1. Propose the configured number of sourced meals (initially two) and derived dinner coverage. Each meal has a quick way to browse another recommendation without changing the other meals. Natural-language changes remain available and preserve unaffected choices.
+2. Confirm extras in a separate step showing only the recipe's optional items, sides, and serving suggestions as simple item checkboxes. App-generated extras and include/omit recommendations are deferred.
+3. Offer freezer, fridge, and pantry photos as the main stock input, with a secondary option to describe stock. Continue also works without adding stock; no separate skip action is needed. Ordinary text fields accept editable OS dictation.
+4. When stock is supplied, show extracted observations as a simple list the user can correct before deriving shopping quantities. Keep observed presence distinct from known usable amounts.
+5. Show one simple consolidated shopping list: ingredient and quantity to buy. Amount editing should not shift the row's size. Checking an ingredient as covered hides it by default, with a way to show and restore covered items. Keep searchable source, quantity and stock details accessible outside the main list rather than exposing many inputs per row.
+6. Before approving the saved revision, show a clean comparison table of ingredient, recipe-required amount and amount to buy. Group covered ingredients first, then purchases. Small recipe tags may identify which meals use an ingredient. Highlight likely oversights in stock or purchase quantities without treating missing observations as absence or silently overriding the user. Keep back navigation to the editable list. Exact attention rules are tracked in [Review attention flags](../.scratch/v1-spec/issues/11-review-attention-flags.md).
+7. Manually launch a separate reusable desktop shopping skill. It reads the approved saved revision, discovers address-available stores, compares a bounded set, and builds a reviewable cart. Present quantities, costs, surplus, gaps, and substitutions; the user handles final review and checkout.
+8. Save successful recipes for consistent reuse with their source, base yield, ingredients, and faithful concise steps. Changes to the plan update shopping quantities and invalidate prior approval as needed.
 
 Phone and laptop friendly web UI is the target. Laptop-first local hosting is accepted; phone access to the laptop host remains unvalidated. The user may choose to do the whole kitchen workflow on a laptop. V1 does not need phone-triggered remote automation.
 
@@ -41,7 +43,9 @@ Phone and laptop friendly web UI is the target. Laptop-first local hosting is ac
 
 Treat photos as a current snapshot, not a maintained inventory system. Keep observed items distinct from confirmed usable amounts. A visible item does not establish sufficient quantity; an item outside the photo is not established as absent. Corrections override image guesses. Do not deduct uncertain quantities silently.
 
-Combine requirements across all recipes, normalize compatible units, and subtract only confirmed on-hand amounts. Include every missing ingredient, including staples. Do not assume rice, pasta, garlic, oil, or seasonings are either present or absent. Make unresolved amounts visible before approval rather than inventing precision.
+Combine requirements across all recipes and normalize compatible units. Offer enough, an amount, or buy the full amount for relevant stock rather than requiring exact measurements. Keep approximations visible and confirm estimated mixed-unit totals. Common seasonings such as salt, pepper, and ordinary spices may be assumed on hand and omitted from shopping, while remaining visible among required ingredients with an easy way to mark them as needed. Keep that assumption distinct from confirmed stock; it does not automatically apply to rice, pasta, garlic, or oil.
+
+Let the user select recipe-listed optional ingredients and serving extras with simple checkboxes before shopping; app recommendations are deferred. For ordinary source yield ranges, scale from the lower bound and show the assumption; flag unusually wide or unclear yields. Detailed quantity rules and acceptance examples are recorded in [Ingredient quantities and pantry confirmation](../.scratch/v1-spec/issues/02-ingredient-quantities.md).
 
 Check existing stock before choosing packs. Accepted household buying defaults:
 
@@ -55,13 +59,13 @@ Always show material excess quantity and the extra cash required for stock-up pu
 
 ## Store comparison and cart requirements
 
-Price comparison **and** delivery-cart creation are required in V1. Begin with approximately two available stores and propose a complete basket from one store by default. The user often orders Walmart and Real Canadian Superstore and knows Costco is available; these are candidate context, not a fixed supported-store list. The logged-in browser's selected address determines actual availability. Never hardcode public Nanaimo store listings; even publicly listed Quality Foods was not visible to the user.
+Price comparison **and** delivery-cart creation are required in V1. Begin with approximately two available stores and propose a complete basket from one store by default. The logged-in browser's selected delivery context determines actual availability. Discover candidates from that context rather than hardcoding public city-level listings or a fixed supported-store list.
 
 Compare suitable products using real pack sizes, required pack counts, availability, constraints, and total basket cost in CAD. Include visible delivery/service fees, taxes, and applicable promotions; mark unknown or conditional charges and promotion eligibility clearly. State when prices were checked. A basket with missing items is not a directly comparable complete basket. Report “cheapest among the checked candidates,” with the stores and limitations, rather than claiming a universal best price.
 
-The separate desktop skill will use the user's connected, logged-in browser. Browser reliability, address-specific discovery, and list-to-cart integration still need actual proof. API access is not a prerequisite for this selected route. Respect existing unrelated cart items; inspect before adding and reconcile quantities on reruns. Record which list revision produced which cart changes. Changed plans invalidate prior shopping approval: require a new approved revision and reconcile stale additions so old meals and duplicate products do not remain silently.
+The separate desktop skill will use the user's connected, logged-in browser. Browser reliability, address-specific discovery, and list-to-cart integration still need actual proof. API access is not a prerequisite for this selected route. Inspect existing cart items before adding. Automatically update identifiable task additions on repeats or newly approved versions, including reductions and removals, while preserving unrelated items and avoiding duplicates. Ask when independent user edits make those quantities ambiguous. Record the approved list version and before/after cart changes; inspect uncertain outcomes before retrying. Changed plans invalidate prior shopping approval.
 
-Flag unavailable ingredients and proposed substitutions, including effects on quantities, recipes, and cost. Material changes must be reviewed; do not silently change the approved plan. Do not place an order, purchase, or complete checkout.
+Complete the work that can be done, then gather unavailable ingredients and meaningful proposed replacements into one review, including effects on quantities, recipes, and cost. Equivalent brands and suitable pack sizes can be selected within the approved constraints; changes affecting the sourced recipe or household constraints remain pending review. Do not silently change the approved plan, place an order, purchase, or complete checkout. See [Approved list handoff and cart reconciliation](../.scratch/v1-spec/issues/04-shopping-handoff.md).
 
 ## Preferences, saved state, and consistency
 
@@ -98,7 +102,7 @@ Sources were checked November 11, 2026. Recheck changing preview and integration
 - Changing household size, weekly recipe count, or portions per recipe through internal configuration updates recipe proposals, scaled quantities, derived coverage, and grocery totals consistently. Verify a non-default combination and a yield that leaves partial household coverage; report leftover portions accurately. No settings UI is required, and future UI controls can use the same configuration and logic.
 - A request to change one meal selects a suitable sourced replacement, preserves the other, and updates source references, ingredient totals, and the shopping list together. If no suitable source is available, the app reports that limitation without inventing a recipe.
 - A stock-photo example distinguishes uncertain recognition/amounts from confirmed amounts, asks only relevant questions, and neither infers absence from invisibility nor sufficiency from presence.
-- Shared ingredients aggregate correctly; confirmed stock is deducted once; every missing staple remains on the list.
+- Shared ingredients aggregate correctly; confirmed stock is deducted once; mixed-unit estimates are visible and confirmed. Common seasonings assumed on hand remain visible among requirements and can be marked needed; other missing staples remain on the list. Optional extras reflect the user's reviewed selection.
 - Weekly preferences remain temporary; explicit household preferences and saved successful recipes survive reload and reuse.
 - The planner completes a real local subscription-backed text request, photo request, and change request, with no separate API billing configured.
 - The desktop route proves five representative ingredients end to end at one address-available store, then compares two stores using actual quantities and visible basket charges.
@@ -109,7 +113,7 @@ Sources were checked November 11, 2026. Recheck changing preview and integration
 
 ## Staged next actions — not authorized implementation yet
 
-1. **Prove shopping:** test the five-ingredient desktop cart at one store, including pack arithmetic, then compare two address-available stores and verify rerun/revision reconciliation. Leave checkout to the user.
+1. **Implement and validate shopping:** the user deferred a preliminary live cart trial during planning. The browser and local-file access checks are enough to continue the specification. During implementation, validate representative ingredients at one store, pack arithmetic, two-store comparison and rerun/revision behavior. Leave checkout to the user; cart correctness remains unproven until tested.
 2. **Build the thin integrated planner:** implement source-backed recipe selection and visible attribution, simple centralized internal planning configuration with the agreed defaults, derived dinner coverage, snapshot corrections, consistent revision updates, saved sourced recipes, local persistence, and saved approved-list handoff. Do not add a settings UI yet. Test built-in iPhone keyboard and laptop OS dictation in the text fields, including correction before submit; validate laptop use and optional phone access separately.
 3. **Try one real week:** review portions, cooking effort, useful prompts, stock deductions, waste, actual basket cost, and manual corrections. Refine from observed friction.
 
