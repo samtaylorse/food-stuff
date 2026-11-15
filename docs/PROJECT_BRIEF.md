@@ -2,6 +2,8 @@
 
 Date: November 11, 2026 · Status: agreed direction; local subscription path validated for the tested account/model ([findings](SUBSCRIPTION_PROTOTYPE_FINDINGS.md)); shopping integrations unproven.
 
+The [implementation specification](../.scratch/food-stuff-v1/spec.md) translates the accepted decisions into local architecture, stored records, integration contracts, build order and acceptance checks. Planning is complete, with the planner-first build order confirmed; implementation evidence remains to be gathered.
+
 ## Purpose and users
 
 Build a general personal meal-planning application, starting with dinners. Its initial household configuration is two people, but household size and planning quantities are configurable, not fixed product constraints. Help users choose dinners, cook practical batch recipes, and turn the result into an accurate grocery list and a reviewable delivery cart. Reduce the weekly work of deciding, calculating quantities, checking stock, comparing stores, and entering products. Lunches already have a separate plan for the initial household and are outside V1.
@@ -14,17 +16,19 @@ The initial household normally cooks twice, sometimes three times per week. Food
 - Under those defaults, each recipe covers three dinners for the household: twelve individual portions cover six household dinners, leaving one evening flexible.
 - Derive coverage from the active configuration and actual recipe yields, rather than hardcoding six dinners or one flexible evening. For each recipe, divide individual portions by household size to report complete household dinners and any leftover individual portions; do not silently round partial coverage into a full dinner. Report weekly coverage and any uncovered evenings or surplus explicitly.
 - Recipes remain flexible; do not assign them to particular days. Permit changes to recipe count, servings, or approach when requested.
-- Each recipe includes a concise ingredient list with quantities and units, explicit servings, clear cooking steps, estimated prep and cook times, and a visible reference to its original source.
+- Each recipe includes a concise ingredient list with quantities and units, explicit servings, a brief method in bullet points, estimated prep and cook times, and a visible reference to its original source. The method is primarily a quick meal-selection preview; V1 users can open the original recipe for cooking.
 
 Centralize these values in a simple internal configuration structure. Planning, portion scaling, coverage calculation, and shopping-list quantities must use the same values. No settings UI or settings framework is needed in the proof of concept. A future web settings UI should be able to expose the same values without rewriting that logic. This setup task adds documentation only, not runtime configuration code.
 
 ## Recipe sources
 
-Start live discovery with Good Food and RecipeTin Eats rather than a fixed recipe catalog. Automatically try another suitable sourced recipe when a candidate is blocked or incomplete, and interrupt only when no usable match can be found. Save selected cooking information locally for consistent reuse: ingredients, faithful concise steps, original yield, and attribution; exclude article text, comments, and photos. Reuse and scaling operate on that saved base version. These product choices still require an extraction trial and source access/use checks; they do not establish a completed importer. See [Source selection and recipe display policy](../.scratch/v1-spec/issues/08-source-selection.md).
+Start live discovery with Good Food and RecipeTin Eats rather than a fixed recipe catalog. Automatically try another suitable sourced recipe when a candidate is blocked or incomplete, and interrupt only when no usable match can be found. Save selected cooking information locally for consistent reuse: ingredients, faithful concise steps, original yield, and attribution; exclude article text, comments, and photos. Reuse and scaling operate on that saved base version. The source-fidelity trial and preview review are complete using manually normalized examples; automated normalization and source access/use conditions remain implementation considerations, not a completed importer. See [Source selection and recipe display policy](../.scratch/v1-spec/issues/08-source-selection.md).
 
 Every recipe displayed by the app must have an associated, identifiable source, including initial suggestions, replacements, and saved recipes. Show the original recipe link or an identifiable user-supplied source reference alongside the recipe. Save its title, source URL or reference, and author or publisher where available so attribution survives reuse and serving changes. A generated citation is not a source: the recipe must actually come from the referenced material.
 
 V1 will not use AI-generated recipes. AI may find and select existing sourced recipes, faithfully extract or summarize their ingredients and instructions, and interpret planning feedback. Serving quantities may be scaled from the source yield. Do not invent ingredients, cooking steps, or recipe variations. Requests such as “less dairy” or “make this vegetarian” should select an existing sourced recipe that meets the request rather than generate an adaptation. If no suitable sourced recipe is available, explain the gap instead of displaying an invented replacement.
+
+Recipe extraction must consider the method and relevant source notes as well as the ingredient array. Preserve method-only ingredients, preparation state and equivalent measures without double-counting. Leave unquantified serving extras explicit. Verify missing timing fields rather than deriving an invented prep/cook split, and do not multiply cooking times with ingredient quantities. Concise bullet-point previews must remain faithful to the source and consistent with the scaled ingredient list. Technical observations and the accepted preview approach are recorded in [Source-backed recipe extraction trial](../.scratch/v1-spec/issues/10-source-extraction-trial.md).
 
 ## V1 experience
 
@@ -56,6 +60,8 @@ Check existing stock before choosing packs. Accepted household buying defaults:
 | Fresh/perishable vegetables | Stay close to the week's needs to reduce spoilage. |
 
 Always show material excess quantity and the extra cash required for stock-up purchases. Cheap unit pricing alone does not justify unnecessary perishable surplus. These are defaults, not permission to ignore existing stock or the approved list.
+
+Review flags are advisory and require no separate acknowledgement. Unreported stock alone is not a warning; compare recipe need with known usable stock plus the purchase to detect shortfalls. Flag clear unexplained excess, while allowing normal pack rounding and intentional stock-ups. Do not use a blanket twice-the-need threshold. Keep ordinary surplus and the calculation basis available in details; preserve the user's edits and approval choice.
 
 ## Store comparison and cart requirements
 

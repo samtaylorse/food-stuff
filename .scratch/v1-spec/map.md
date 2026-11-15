@@ -2,15 +2,19 @@
 
 Type: map
 Label: wayfinder:map
-Status: open
+Status: resolved
+Completed: November 14, 2026
 
 ## Destination
 
 An implementation-ready V1 specification for the local dinner planner and its separately launched desktop grocery-cart workflow, with the major product, data, and integration decisions resolved.
 
+Reached: [implementation specification](../food-stuff-v1/spec.md). The user confirmed the planner-first build order after clarification; both planner and desktop shopping remain V1.
+
 ## Notes
 
 - Planning effort: resolve decisions and gather evidence; production implementation follows separately.
+- Advance to the next available item automatically when one is settled; do not wait for a separate continue message. Pause for substantive user decisions or genuinely required external actions, not permission to proceed through the map.
 - Baseline: [project brief](../../docs/PROJECT_BRIEF.md) and [subscription access findings](../../docs/SUBSCRIPTION_PROTOTYPE_FINDINGS.md). Preserve the prototype stash.
 - The user confirmed the destination and frontier. Discover recipes as needed across a few selected websites, not a fixed catalog. Every displayed recipe needs a verified source; V1 excludes generated recipes and invented variations.
 - Sharing original recipe links covers the partner's V1 use. Separate partner access is deferred.
@@ -32,12 +36,13 @@ An implementation-ready V1 specification for the local dinner planner and its se
 - [Planner proposal and review interaction](issues/03-planner-interaction.md): the user accepted the focused flow from meals through covered-first approval; UI polish is deferred and targeted review flags remain to define.
 - [Approved list handoff and cart reconciliation](issues/04-shopping-handoff.md): consume a saved approved version, update identifiable task additions without duplicates, preserve unrelated cart items, and gather gaps or meaningful replacements into one review.
 - [Connect the browser and verify shopping context](issues/09-browser-connection.md): a fresh Terra chat opened its own built-in browser pane, verified the signed-in delivery context and grocery options, and read a local handoff fixture; no cart changes were made.
+- [Source-backed recipe extraction trial](issues/10-source-extraction-trial.md): source checks exposed method-only ingredients and equivalent measurements; the user accepted concise bullet-point previews for meal selection, with the original source available for cooking. Automated normalization remains unproven.
+- [Review attention flags](issues/11-review-attention-flags.md): subtle missing-stock status, grounded coverage checks and contextual unexplained-excess flags; no blanket twice-the-need rule or per-flag acknowledgement.
+- [Architecture boundaries and specification readiness](issues/07-specification-boundaries.md): specification complete, with a local app and saved approved list built first, desktop shopping second, and one real week last.
 
 ## Not yet specified
 
-- Source-specific extraction and ingredient edge cases may emerge from sample recipes.
-- Browser failure recovery and partial-basket review details may need additional focused decisions after the first workflow discussion.
-- Exact implementation slices depend on the decisions below; this map does not preassign build tasks.
+- No remaining planning questions. The specification records source and browser edge cases as implementation validation obligations. Create further planning tickets only if that evidence exposes a new product decision; do not invent new prototype gates for already settled behavior.
 
 ## Out of scope
 
