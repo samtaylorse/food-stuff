@@ -11,3 +11,7 @@ Use the five default triage roles. See `docs/agents/triage-labels.md`.
 ### Domain docs
 
 Use a single-context layout. See `docs/agents/domain.md`.
+
+## Temporary files
+
+Store untracked notes, data, and temporary files under `local/`.
