@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "runId": "run-demo-2",
+  "approval": {
+    "approvalId": "approval-demo-1",
+    "shoppingListId": "list-demo",
+    "revision": 1,
+    "digest": "sha256:8d9fbbde0ce4e122e1624f611027e23c9c14d16b6899e1b59c44442912dbc1af"
+  },
+  "startedAt": "2026-11-15T12:03:00.000Z"
+}

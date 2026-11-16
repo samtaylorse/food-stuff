@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "shopping-result",
+  "runId": "run-demo-1",
+  "approval": {
+    "approvalId": "approval-demo-1",
+    "shoppingListId": "list-demo",
+    "revision": 1,
+    "digest": "sha256:8d9fbbde0ce4e122e1624f611027e23c9c14d16b6899e1b59c44442912dbc1af"
+  },
+  "finishedAt": "2026-11-15T12:02:00.000Z",
+  "status": "incomplete",
+  "reason": "Unresolved shopping decisions",
+  "costs": {
+    "currency": "CAD",
+    "observedAt": "2026-11-15T12:02:00.000Z",
+    "itemsMinor": 1250,
+    "feesMinor": null,
+    "taxesMinor": null,
+    "knownTotalMinor": 1250,
+    "unknownCharges": ["fees", "taxes"],
+    "conditions": ["No conditional promotion savings included"]
+  },
+  "gaps": [
+    {
+      "ingredientId": "herbs",
+      "reason": "unavailable",
+      "detail": "No suitable pack observed"
+    }
+  ],
+  "pendingReplacements": [
+    {
+      "ingredientId": "rice",
+      "proposal": "A different grain",
+      "reason": "Would change the sourced recipe; requires user decision"
+    }
+  ]
+}

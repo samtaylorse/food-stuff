@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "kind": "approved-shopping-list",
+  "approvalId": "approval-demo-1",
+  "approvedAt": "2026-11-15T12:00:00.000Z",
+  "shoppingList": {
+    "shoppingListId": "list-demo",
+    "revision": 1,
+    "weekId": "week-demo",
+    "configuration": {
+      "householdSize": 2,
+      "batchRecipeCount": 2,
+      "individualPortionsPerRecipe": 6
+    },
+    "currency": "CAD",
+    "constraints": ["No peanuts"],
+    "recipes": [
+      {
+        "recipeVersionId": "recipe-demo-a-v1",
+        "title": "Synthetic lentil dinner",
+        "source": {
+          "reference": "https://example.org/recipes/lentils",
+          "publisher": "Synthetic examples"
+        },
+        "sourceDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "recipeVersionId": "recipe-demo-b-v1",
+        "title": "Synthetic rice dinner",
+        "source": {
+          "reference": "https://example.org/recipes/rice",
+          "publisher": "Synthetic examples"
+        },
+        "sourceDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    ],
+    "ingredients": [
+      {
+        "ingredientId": "onion",
+        "name": "Onions",
+        "constraints": [],
+        "requirements": [
+          {
+            "recipeVersionId": "recipe-demo-a-v1",
+            "amount": {
+              "kind": "exact",
+              "value": 300,
+              "unit": "g",
+              "basis": "net"
+            }
+          },
+          {
+            "recipeVersionId": "recipe-demo-b-v1",
+            "amount": {
+              "kind": "exact",
+              "value": 200,
+              "unit": "g",
+              "basis": "net"
+            }
+          }
+        ],
+        "stock": {
+          "kind": "amount",
+          "amount": {
+            "kind": "approximate",
+            "value": 200,
+            "unit": "g",
+            "basis": "net",
+            "explanation": "User estimates remaining usable onion"
+          }
+        },
+        "purchase": {
+          "kind": "buy",
+          "target": {
+            "kind": "approximate",
+            "value": 300,
+            "unit": "g",
+            "basis": "net",
+            "explanation": "500 g need less approximately 200 g stock, deducted once"
+          },
+          "reason": "need",
+          "note": "Shared ingredient; deduction is consolidated"
+        }
+      },
+      {
+        "ingredientId": "broccoli",
+        "name": "Broccoli",
+        "constraints": [],
+        "requirements": [
+          {
+            "recipeVersionId": "recipe-demo-a-v1",
+            "amount": {
+              "kind": "exact",
+              "value": 300,
+              "unit": "g",
+              "basis": "net"
+            }
+          }
+        ],
+        "stock": {
+          "kind": "unknown",
+          "presence": "unreported"
+        },
+        "purchase": {
+          "kind": "buy",
+          "target": {
+            "kind": "exact",
+            "value": 500,
+            "unit": "g",
+            "basis": "net"
+          },
+          "reason": "pack-rounding",
+          "note": "Ordinary 500 g bag leaves 200 g surplus; no product selection recorded"
+        }
+      },
+      {
+        "ingredientId": "rice",
+        "name": "Rice",
+        "constraints": ["Dry weight"],
+        "requirements": [
+          {
+            "recipeVersionId": "recipe-demo-b-v1",
+            "amount": {
+              "kind": "range",
+              "min": 300,
+              "max": 350,
+              "unit": "g",
+              "basis": "dry"
+            }
+          }
+        ],
+        "stock": {
+          "kind": "buy-full"
+        },
+        "purchase": {
+          "kind": "buy",
+          "target": {
+            "kind": "exact",
+            "value": 1000,
+            "unit": "g",
+            "basis": "dry"
+          },
+          "reason": "stock-up",
+          "note": "Explicit user choice for a long-lived staple; does not assert zero stock"
+        }
+      },
+      {
+        "ingredientId": "herbs",
+        "name": "Serving herbs",
+        "constraints": [],
+        "requirements": [
+          {
+            "recipeVersionId": "recipe-demo-a-v1",
+            "amount": {
+              "kind": "unquantified",
+              "description": "Optional source-listed serving herbs, selected by user"
+            }
+          }
+        ],
+        "stock": {
+          "kind": "unknown",
+          "presence": "observed"
+        },
+        "purchase": {
+          "kind": "buy",
+          "target": {
+            "kind": "unquantified",
+            "description": "One suitable small pack; source gives no weight"
+          },
+          "reason": "need",
+          "note": "Presence observed, usable quantity unknown"
+        }
+      },
+      {
+        "ingredientId": "salt",
+        "name": "Salt",
+        "constraints": [],
+        "requirements": [
+          {
+            "recipeVersionId": "recipe-demo-b-v1",
+            "amount": {
+              "kind": "unquantified",
+              "description": "To taste"
+            }
+          }
+        ],
+        "stock": {
+          "kind": "enough",
+          "confirmedFor": {
+            "kind": "unquantified",
+            "description": "To taste for the current recipe selection and yield"
+          }
+        },
+        "purchase": {
+          "kind": "covered",
+          "reason": "User confirmed enough for this requirement"
+        }
+      }
+    ]
+  },
+  "digest": "sha256:8d9fbbde0ce4e122e1624f611027e23c9c14d16b6899e1b59c44442912dbc1af"
+}
